@@ -27,13 +27,16 @@ stages{
             parallel{
                 stage ('Deploy to Staging'){
                     steps {
-                        sh "scp -i /var/lib/jenkins/MyEc2KeyPair.pem **/target/*.war ec2-user@${params.tomcat_dev}:/var/lib/tomcat7/webapps"
+			sh "who"
+			sh "eval `ssh-agent -s`"
+			sh "ssh-add /home/ec2-user/MyEc2KeyPair.pem"
+                        sh "scp -i /home/ec2-user/MyEc2KeyPair.pem **/target/*.war ec2-user@${params.tomcat_dev}:/var/lib/tomcat7/webapps"
                     }
                 }
 
                 stage ("Deploy to Production"){
                     steps {
-                        sh "scp -i /var/lib/jenkins/MyEc2KeyPair.pem **/target/*.war ec2-user@${params.tomcat_prod}:/var/lib/tomcat7/webapps"
+                        sh "scp -i /home/ec2-user/MyEc2KeyPair.pem **/target/*.war ec2-user@${params.tomcat_prod}:/var/lib/tomcat7/webapps"
                     }
                 }
             }
